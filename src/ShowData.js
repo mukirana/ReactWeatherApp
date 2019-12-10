@@ -2,11 +2,6 @@ import React from 'react'
 
 
 class ShowData extends React.Component{
-
-    constructor(props){
-        super(props)  
-    }
-
     render(){
         return( 
             <>  

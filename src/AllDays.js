@@ -1,9 +1,6 @@
 import React from 'react'
 
 class AllDays extends React.Component{
-constructor(props){
-    super(props)  
-}
 
 getData = (value)=>{
     
