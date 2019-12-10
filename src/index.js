@@ -12,6 +12,7 @@ import {
   Route,
   Link
 } from "react-router-dom" 
+
 const ApiKey = "daa05ecbb7ef177d7a1201194913c9b5"
 class App extends React.Component {
 
@@ -67,14 +68,14 @@ class App extends React.Component {
     }
     
     onSubmit = (city)=>{
+      this.setState({
+        error: false,
+        blankTextBox:false,
+        isLoading:true,
+        list: {},
+        cityName:"",
+      })
       if(city){
-        this.setState({
-          error: false,
-          blankTextBox:false,
-          isLoading:true,
-          list: {},
-          cityName:"",
-        })
        fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city},india&APPID=${ApiKey}`)
         .then(response => {
           if(!response.ok){
@@ -93,7 +94,7 @@ class App extends React.Component {
         .catch(error => this.setState({error:true,  isLoading:false }));
       }
       else{
-        this.setState({blankTextBox:true})
+        this.setState({blankTextBox:true , isLoading:false})
       }
     }
 
