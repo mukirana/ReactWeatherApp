@@ -1,12 +1,145 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Search from './Search.js'
+import AllDays from './AllDays.js'
+import ShowData from './ShowData.js'
+import 'bootstrap/dist/css/bootstrap.css'
+import NavBar from './NavBar.js'
+import './index.css'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom" 
+const ApiKey = "daa05ecbb7ef177d7a1201194913c9b5"
+class App extends React.Component {
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    constructor(props){
+      super(props)
+      this.state = {
+        error: false,
+        blankTextBox:false,
+        isLoading:false,
+        list: {},
+        cityName:"",
+      }
+    
+      this.onSubmit = this.onSubmit.bind(this)
+    }
+   
+    error =()=>{
+      return(
+        <div className="alert alert-danger mx-5" role="alert">
+          Data Not Found please enter correct city..
+        </div>
+      )
+    }
+
+    getDate= (val)=>{
+      var date = new Date()
+      date.setDate(date.getDate() + val)
+      return date.toJSON().slice(0,10).toString()
+
+      
+    }
+
+    parseResponse = (response) => {
+     // debugger;
+      let returnList = {};
+      const { list } = response;
+      for(const element in list) {
+        const date = list[element].dt_txt.split(" ")[0];
+        
+        let dateData = returnList[date];
+        if(dateData === undefined) {
+          dateData = [];
+        }
+        returnList = {
+          ...returnList,
+          [date]:[ 
+            ...dateData,
+            list[element]
+          ]
+        }
+      }
+      return returnList
+    }
+    
+    onSubmit = (city)=>{
+      if(city){
+        this.setState({
+          error: false,
+          blankTextBox:false,
+          isLoading:true,
+          list: {},
+          cityName:"",
+        })
+       fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city},india&APPID=${ApiKey}`)
+        .then(response => {
+          if(!response.ok){
+            throw Error(response.statusText)
+          }
+          return response.json()})
+        .then(response =>{
+          // console.log(response)
+          return this.setState({
+            list: this.parseResponse(response),
+            cityName:city,
+            isLoading:false,
+            error:false
+          })
+        })
+        .catch(error => this.setState({error:true,  isLoading:false }));
+      }
+      else{
+        this.setState({blankTextBox:true})
+      }
+    }
+
+    render(){
+      const {
+        list,
+        error,
+        isLoading,
+        blankTextBox
+      }  = this.state;
+      console.log('isLoading', isLoading);
+      return(
+        <div>
+          <NavBar onSubmit={this.onSubmit} blankTextBox={blankTextBox}/>
+          <main> 
+              {error ? this.error():null}  
+              {isLoading ? <h1>Loading...</h1> : null}
+              {((Object.keys(list)).length > 0) &&  <Router>    
+                    <div className="mb-5">
+                      <div className="navbar  navbar-expand-lg navbar-light" style={{backgroundColor:"#e3f2fd"}}>
+                        <div className="row justify-content-center">
+                          <ul className="navbar-nav mr-auto">
+                            <li className="nav-item"><Link className="nav-link ml-2" to="/">Today</Link></li>
+                            <li className="nav-item"> <Link className="nav-link ml-2 " to="tomorrow">Tomorrow</Link></li>
+                            <li className="nav-item"> <Link className="nav-link ml-2 " to="AllDays">AllDays</Link></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  <Switch>
+                      <Route path="/tomorrow">
+                          <ShowData name={"Tomorrow"}  tempData = {list[this.getDate(1)]} cityName={this.state.cityName} />  
+                      </Route>
+                      <Route path="/AllDays">
+                          <AllDays tempAllDays = {list} cityName={this.state.cityName}/>
+                      </Route>
+                      <Route path="/">
+                          <ShowData name={"Today"} tempData = {list[this.getDate(0)]} cityName={this.state.cityName} />
+                      </Route>
+                  </Switch>
+              </Router> }       
+          </main>  
+        </div>  
+      )
+    }
+}
+ 
+ReactDOM.render(<App />, document.getElementById('root'))
