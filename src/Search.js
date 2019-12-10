@@ -11,7 +11,6 @@ const city = [
   'Chennai',
 ];
 
-
 class Search extends React.Component{
   constructor(){
     super()
@@ -38,10 +37,11 @@ class Search extends React.Component{
                 onUpdateInput={this.setCity.bind(this)}
                 maxSearchResults={3}
                 fullWidth={true}
-                style={{background:"#D3D3D3"}}
+                style={{backgroundColor:"floralWhite", borderRadius:'14px'}}
                 />
           </MuiThemeProvider> 
           </div>
+          
           <div className=" mt-3 ml-3 col-lg-3 col-sm-12">
           <input type="submit" onClick={() => this.props.onSubmit(this.state.cityName)} className="btn btn-warning input-group-text" />
           </div>
