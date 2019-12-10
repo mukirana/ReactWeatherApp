@@ -5,7 +5,6 @@ class NavBar extends React.Component{
       return (
       <>
         <nav className="navbar navbar-light" style={{background:"#563D7C"}}>
-
           <a className="navbar-brand ml-2" href="#" style={{color:"#f0ad4e"}}>
               Weather app
           </a>

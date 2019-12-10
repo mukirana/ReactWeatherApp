@@ -1,7 +1,6 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Search from './Search.js'
 import AllDays from './AllDays.js'
 import ShowData from './ShowData.js'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -105,17 +104,19 @@ class App extends React.Component {
         isLoading,
         blankTextBox
       }  = this.state;
-      console.log('isLoading', isLoading);
+
       return(
         <div>
           <NavBar onSubmit={this.onSubmit} blankTextBox={blankTextBox}/>
           <main> 
               {error ? this.error():null}  
-              {isLoading ? <h1>Loading...</h1> : null}
+              {isLoading ? 
+                 <h1>Fetching Data...</h1> : 
+              null}
               {((Object.keys(list)).length > 0) &&  <Router>    
                     <div className="mb-5">
-                      <div className="navbar  navbar-expand-lg navbar-light" style={{backgroundColor:"#e3f2fd"}}>
-                        <div className="row justify-content-center">
+                      <div className="navbar  navbar-expand-lg navbar-light justify-content-center" style={{backgroundColor:"#e3f2fd"}}>
+                        <div className="row">
                           <ul className="navbar-nav mr-auto">
                             <li className="nav-item"><Link className="nav-link ml-2" to="/">Today</Link></li>
                             <li className="nav-item"> <Link className="nav-link ml-2 " to="tomorrow">Tomorrow</Link></li>
@@ -124,6 +125,19 @@ class App extends React.Component {
                         </div>
                       </div>
                     </div>
+                    {/* <nav>
+                        <div class="nav-wrapper">
+
+                          <ul class="right hide-on-med-and-down">
+                            <li><a href="sass.html">Sass</a></li>
+                            <li><a href="badges.html">Components</a></li>
+                            <li><a href="collapsible.html">Javascript</a></li>
+                            <li><a href="mobile.html">Mobile</a></li>
+                          </ul>
+                        </div>
+                    </nav> */}
+
+
                   <Switch>
                       <Route path="/tomorrow">
                           <ShowData name={"Tomorrow"}  tempData = {list[this.getDate(1)]} cityName={this.state.cityName} />  

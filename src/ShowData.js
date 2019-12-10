@@ -12,8 +12,8 @@ class ShowData extends React.Component{
             <>  
                 {this.props.tempData && this.props.tempData.map((data,index)=>{
                    return(
-                    <div className="row justify-content-center">
-                        <div key={index} className="card mt-5" style={{width: "60rem"}}>       
+                    <div key={index} className="row justify-content-center">
+                        <div className="card mt-5" style={{width: "60rem"}}>       
                             <div className="card-body">
                                 <h5 className="card-title ">{this.props.name} temperature in {this.props.cityName} at <span className="badge badge-danger badge-lg">{(data.dt_txt).slice(11,16)} O'clock</span></h5>
                                 <p style={{color:"#708090", fontFamily:"sans-serif", fontSize:"2.6rem"}}>{data.weather[0].description}</p>

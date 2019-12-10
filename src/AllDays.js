@@ -1,15 +1,16 @@
 import React from 'react'
 
 class AllDays extends React.Component{
-
 constructor(props){
     super(props)  
 }
+
 getData = (value)=>{
+    
      const temp = value.map((data,index)=>{
           return(
               <>
-                <div className="card-body">   
+                <div key={data.dt} className="card-body">   
                     <p style={{color:"#708090", fontFamily:"sans-serif", fontSize:"2.6rem"}}>{data.weather[0].description}</p>
                     <div className="row">
                         <div className="col-lg-2">
@@ -43,7 +44,7 @@ render(){
           var data = this.props.tempAllDays[key]
           return(
                <>
-                <div key={data.dt}>
+                <div key={key}>
                     <div className="row justify-content-center">
                         <div className="card mt-5" style={{width: "60rem"}}>
                             <div className="card-head ml-3"> 
