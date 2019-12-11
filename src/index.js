@@ -76,7 +76,7 @@ class App extends React.Component {
         cityName:"",
       })
       if(city){
-       fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${city},india&APPID=${ApiKey}`)
+       fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},india&APPID=${ApiKey}`)
         .then(response => {
           if(!response.ok){
             throw Error(response.statusText)
